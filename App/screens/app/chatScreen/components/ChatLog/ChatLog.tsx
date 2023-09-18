@@ -24,7 +24,7 @@ const ChatLog = ({messages}: {messages: TMessage[]}) => {
       setTimeout(() => {
         SetIsFlatListReady(2);
         flatListRef.current.scrollToEnd({animated: false});
-      }, 650);
+      }, 700);
       return;
     }
   };

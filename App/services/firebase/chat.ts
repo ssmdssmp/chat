@@ -84,20 +84,35 @@ export const createNewChat = async (
   receiverId: string,
   firstMessage: string,
 ) => {
-  const newChatKey = await RTDatabase.ref('chats').push({
+  // Generate a unique key for the new chat entry
+  const newChatKey = RTDatabase.ref('chats').push().key;
+
+  // Create the chat entry
+  const chatEntry = {
+    messages: {
+      [newChatKey]: {
+        sender: senderId,
+        text: firstMessage,
+        timestamp: new Date().toString(),
+        status: 'sent',
+      },
+    },
     participants: {
       [senderId]: true,
       [receiverId]: true,
     },
-  }).key;
-  RTDatabase.ref(`chats/${newChatKey}/messages`).push({
-    sender: senderId,
-    text: firstMessage,
-    timestamp: new Date().toString(),
-    status: 'sent',
-  });
+  };
+
+  // Set the chat entry in the Firebase Realtime Database
+  await RTDatabase.ref(`chats/${newChatKey}`).set(chatEntry);
+
+  // Fetch the new chat
   const newChat = await getChatById(newChatKey);
+
+  // Fetch receiver data
   const receiver = await getUserData(receiverId);
+
+  // Transform messages into an array and sort them
   const messagesArray = Object.entries(newChat.messages)
     .map(([messageId, messageData]) => ({
       id: messageId,
@@ -110,9 +125,13 @@ export const createNewChat = async (
       const dateB = new Date(b.timestamp);
       return dateA - dateB;
     });
+
+  // Create the newChatEntry object
   const newChatEntry = {
     chat: {...newChat, id: newChatKey, messages: messagesArray},
     receiver,
   };
+
+  // Return the newChatEntry and newChatId
   return {newChat: newChatEntry, newChatId: newChatKey};
 };
