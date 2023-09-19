@@ -1,5 +1,5 @@
 import {Text} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {noAvatar} from '@/assets';
 import {FlexWrapper} from '@/styles';
 import {
@@ -17,9 +17,27 @@ import {useNavigation} from '@react-navigation/native';
 import useFormattedDate from '@/hooks/useFormattedDate';
 
 const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
-  const {receiver, chat} = chatObj;
   const navigation = useNavigation<AppNavigationProp>();
-  const lastMessage = chat.messages[chat.messages.length - 1];
+  const [lastMessage, setLastMessage] = useState({
+    id: '',
+    timestamp: new Date(),
+    text: '',
+    sender: '',
+  });
+  if (!chatObj) {
+    // Handle the case when chatObj is undefined
+    return (
+      <PressableChatItem
+        onPress={() => {
+          /* Handle the press event for undefined chatObj */
+        }}></PressableChatItem>
+    );
+  }
+  const {receiver, chat} = chatObj;
+  useEffect(() => {
+    setLastMessage(chat.messages.at(-1));
+  }, [chat.messages.length]);
+
   const handleItemPress = () => {
     navigation.navigate('Chat', {
       id: chat.id,
@@ -28,17 +46,23 @@ const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
       messages: chat.messages,
     });
   };
+
   const formattedTimestamp = useFormattedDate(lastMessage.timestamp);
+
   return (
     <PressableChatItem onPress={handleItemPress}>
       <FlexWrapper dir="row" align="center">
         <Avatar
-          source={{
-            uri: receiver.avatar || noAvatar,
-          }}
+          source={
+            receiver
+              ? {
+                  uri: receiver.avatar,
+                }
+              : noAvatar
+          }
         />
         <TextWrapper>
-          <Name>{receiver.username}</Name>
+          <Name>{receiver ? receiver.username : ''}</Name>
           <LastMessage>{lastMessage.text}</LastMessage>
         </TextWrapper>
         <StatusTextWrapper>

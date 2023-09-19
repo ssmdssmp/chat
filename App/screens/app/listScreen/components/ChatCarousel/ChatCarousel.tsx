@@ -23,7 +23,7 @@ const ChatCarousel = ({chats}: {chats: TChatWithReceiverData[]}) => {
         style={{height: Dimensions.get('window').height - 160}}
         loop={false}
         width={Dimensions.get('screen').width}
-        data={[chats, chats]}
+        data={chats ? [chats, chats] : [[], []]}
         renderItem={renderItem}
       />
     </FlexWrapper>

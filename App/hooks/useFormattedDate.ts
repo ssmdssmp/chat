@@ -19,7 +19,9 @@ const useFormattedDate = (date: string) => {
       setFormattedDate(targetDate.format('DD.MM.YYYY'));
     }
   }, [date]);
-
+  if (!date || date.length === 0) {
+    return;
+  }
   return formattedDate;
 };
 

@@ -113,18 +113,14 @@ export const createNewChat = async (
   const receiver = await getUserData(receiverId);
 
   // Transform messages into an array and sort them
-  const messagesArray = Object.entries(newChat.messages)
-    .map(([messageId, messageData]) => ({
+  const messagesArray = Object.entries(newChat.messages).map(
+    ([messageId, messageData]) => ({
       id: messageId,
       sender: messageData.sender,
       text: messageData.text,
       timestamp: messageData.timestamp,
-    }))
-    .sort((a, b) => {
-      const dateA = new Date(a.timestamp);
-      const dateB = new Date(b.timestamp);
-      return dateA - dateB;
-    });
+    }),
+  );
 
   // Create the newChatEntry object
   const newChatEntry = {

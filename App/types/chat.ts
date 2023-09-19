@@ -2,7 +2,7 @@ import {TUser} from './user';
 
 export type TMessage = {
   sender: string;
-  id?: string;
+  id: string;
   text: string;
   timestamp: string;
 };
