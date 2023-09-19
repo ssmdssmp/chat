@@ -1,5 +1,5 @@
 import {Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {noAvatar} from '@/assets';
 import {FlexWrapper} from '@/styles';
 import {
@@ -15,15 +15,22 @@ import {AppNavigationProp} from '@/navigation';
 import {TChatWithReceiverData} from '@/types/chat';
 import {useNavigation} from '@react-navigation/native';
 import useFormattedDate from '@/hooks/useFormattedDate';
+import {useAppSelector} from '@/store';
+import {getChatSelector} from '@/store/modules/chat/selector';
 
 const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
   const navigation = useNavigation<AppNavigationProp>();
+  const {chats} = useAppSelector(getChatSelector);
+  const chatsStateRef = useRef(null);
+  chatsStateRef.current = chats;
+
   const [lastMessage, setLastMessage] = useState({
     id: '',
     timestamp: new Date(),
     text: '',
     sender: '',
   });
+
   if (!chatObj) {
     // Handle the case when chatObj is undefined
     return (
@@ -36,7 +43,8 @@ const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
   const {receiver, chat} = chatObj;
   useEffect(() => {
     setLastMessage(chat.messages.at(-1));
-  }, [chat.messages.length]);
+    console.log(lastMessage);
+  }, [chat.messages.length, chatsStateRef.length]);
 
   const handleItemPress = () => {
     navigation.navigate('Chat', {

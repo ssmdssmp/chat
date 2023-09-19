@@ -13,7 +13,18 @@ export const chatReducer = createSlice({
       state.chats = payload;
     },
     addChat: (state, {payload}) => {
-      state.chats.push(payload);
+      if (state.chats.length >= 2) {
+        state.chats = [payload, ...state.chats].sort((a, b) => {
+          const dateA = new Date(a.chat.messages.at(-1).timestamp);
+          const dateB = new Date(b.chat.messages.at(-1).timestamp);
+          return dateA - dateB;
+        });
+      }
+      if (state.chats.length === 0) {
+        state.chats = payload;
+      } else {
+        state.chats = [payload, ...state.chats];
+      }
     },
     updateChat: (
       state,
@@ -32,7 +43,10 @@ export const chatReducer = createSlice({
         });
       }
     },
-    deleteChats: state => {
+    deleteChat: (state, {payload}) => {
+      state.chats = state.chats.filter(el => el.chat.id !== payload);
+    },
+    resetChats: state => {
       state.chats = [];
     },
   },
