@@ -39,7 +39,7 @@ export const chatReducer = createSlice({
     ) => {
       state.chats
         .filter(el => el.chat.id === payload.chatId)[0]
-        .chat.messages.find(el => el.id === payload.messageId).status =
+        .chat.messages.find(el => el.id === payload.messageId).messageStatus =
         payload.newStatus;
     },
     sortChats: state => {

@@ -6,7 +6,11 @@ const ChatNavigator = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
-      <Stack.Screen name="List" component={ListScreen} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="List"
+        component={ListScreen}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="Chat"

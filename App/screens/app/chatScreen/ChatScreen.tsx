@@ -42,11 +42,11 @@ const ChatScreen = () => {
     if (
       currentChat.messages
         .filter(el => el.sender !== userId)
-        .some(el => el.status === 'sent')
+        .some(el => el.messageStatus === 'sent')
     ) {
       currentChat.messages
-        .filter(el => el.sender !== userId)
-        .filter(el => el.status === 'sent')
+        .filter(el => el.messageStatus !== userId)
+        .filter(el => el.messageStatus === 'sent')
         .forEach(item => {
           updateMessageStatus(currentChat.id, item.id, 'received');
           dispatch(
@@ -87,7 +87,7 @@ const ChatScreen = () => {
           chatActions.changeMessageStatus({
             chatId: route.params.id,
             messageId: snapshot.key,
-            newStatus: updatedChat.status,
+            newStatus: updatedChat.messageStatus,
           }),
         );
       });

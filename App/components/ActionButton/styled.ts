@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {TActionIconWrapper, TActionPressable, TActionText} from './types';
 
 export const StyledPressable = styled.Pressable<TActionPressable>`
-  width: 100%;
+  width: 90%;
   height: 45px;
   flex-direction: row;
   background-color: ${({bgColor}) => bgColor};

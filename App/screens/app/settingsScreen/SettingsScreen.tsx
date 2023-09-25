@@ -19,7 +19,7 @@ const SettingsScreen = () => {
   return (
     <ScreenWrapper padding={10} bgColor="#E9ECEF">
       <ProfileInfo />
-      <ActionButton
+      {/* <ActionButton
         bgColor="white"
         textColor="#409e40"
         onPress={logout}
@@ -27,7 +27,7 @@ const SettingsScreen = () => {
         iconColor="#409e40"
         xml={plusIcon}
         text={'Add Account'}
-      />
+      /> */}
       <ActionButton
         text="Logout"
         bgColor="white"

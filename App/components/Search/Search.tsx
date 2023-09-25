@@ -1,7 +1,6 @@
-import {Image, TextInput} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {searchIcon} from '@/assets';
-import {SearchWrapper} from './styled';
+import {SearchWrapper, StyledTextInput} from './styled';
 import {SvgXml} from 'react-native-svg';
 
 const Search = ({
@@ -19,7 +18,7 @@ const Search = ({
   return (
     <SearchWrapper onPress={handlePress}>
       {isFocused ? null : <SvgXml xml={searchIcon} height={15} width={15} />}
-      <TextInput
+      <StyledTextInput
         ref={ref}
         style={{width: isFocused ? '100%' : 'auto'}}
         onFocus={() => setIsFocused(true)}

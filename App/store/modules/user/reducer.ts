@@ -15,6 +15,12 @@ const userReducer = createSlice({
       state.data.email = payload.email;
       state.data.avatar = payload.avatar;
     },
+    setUserData: (state, {payload}) => {
+      state.data.userId = payload.userId;
+      state.data.userName = payload.userName;
+      state.data.email = payload.email;
+      state.data.avatar = payload.avatar;
+    },
     logout: state => {
       state.data = emptyUser;
     },

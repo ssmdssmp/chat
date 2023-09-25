@@ -25,7 +25,7 @@ const ChatInput = () => {
         text: messageText,
         timestamp: new Date().toString(),
         sender: userId ? userId : '',
-        status: 'sent',
+        messageStatus: 'sent',
       };
 
       if (route.params.id) {
@@ -36,7 +36,7 @@ const ChatInput = () => {
               id: route.params.id,
               message: {
                 ...newMessage,
-                status: 'sending',
+                messageStatus: 'sending',
                 id: newMessageKey as string,
               },
             }),

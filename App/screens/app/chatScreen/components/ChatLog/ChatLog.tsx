@@ -34,6 +34,7 @@ const ChatLog = ({messages}: {messages: TMessage[]}) => {
     }
   };
   const renderItem: ListRenderItem<TMessage> = ({item}) => {
+    console.log(item);
     return (
       <Message key={item.id} message={item} userId={userId}>
         <MessageText>{item.text}</MessageText>
@@ -46,9 +47,9 @@ const ChatLog = ({messages}: {messages: TMessage[]}) => {
               width={15}
               height={15}
               xml={
-                item.status === 'received'
+                item.messageStatus === 'received'
                   ? readIcon
-                  : item.status === 'sent'
+                  : item.messageStatus === 'sent'
                   ? sentIcon
                   : sendingIcon
               }

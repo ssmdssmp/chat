@@ -23,7 +23,7 @@ export const updateMessageStatus = async (
 ) => {
   try {
     const messageRef = RTDatabase.ref(`chats/${chatId}/messages/${messageId}`);
-    await messageRef.update({status: newStatus});
+    await messageRef.update({messageStatus: newStatus});
   } catch (error) {
     console.error('Error getting chat:', error);
     throw error;
@@ -106,7 +106,7 @@ export const createNewChat = async (
       [newMessageKey]: {
         sender: senderId,
         text: firstMessage,
-        status: 'sent',
+        messageStatus: 'sent',
         timestamp: new Date().toString(),
       },
     },

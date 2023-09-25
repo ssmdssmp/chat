@@ -4,7 +4,7 @@ export type TMessage = {
   sender: string;
   id: string;
   text: string;
-  status: 'sent' | 'sending' | 'received';
+  messageStatus: 'sent' | 'sending' | 'received';
   timestamp: string;
 };
 

@@ -3,19 +3,25 @@ import {ScreenWrapper} from '@/styles';
 import {ChatCarousel} from './components';
 import io from 'socket.io-client';
 import {Search} from '@/components';
-import {chatActions, getUserSelector, useAppSelector} from '@/store';
+import {
+  chatActions,
+  getUserSelector,
+  useAppSelector,
+  userActions,
+} from '@/store';
 import {useAppDispatch} from '@/store';
 import {getChatSelector} from '@/store/modules/chat/selector';
-import {RTDatabase} from '@/services';
+import {getUserData, RTDatabase} from '@/services';
 import {TChatWithReceiverData} from '@/types';
 
 const ListScreen = () => {
   const [searchText, setSearchText] = useState('');
-  const {userId} = useAppSelector(getUserSelector);
+  const {userId, avatar} = useAppSelector(getUserSelector);
   const {chats} = useAppSelector(getChatSelector);
   const dispatch = useAppDispatch();
   const chatsStateRef = useRef(null);
   chatsStateRef.current = chats;
+
   useEffect(() => {
     const socket = io('http://localhost:3000', {
       transports: ['websocket'],

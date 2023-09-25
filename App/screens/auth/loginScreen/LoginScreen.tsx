@@ -18,6 +18,7 @@ import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, userActions} from '@/store';
 import {AuthNavigationProp} from '@/navigation';
+import {getUserData} from '@/services';
 
 const LoginScreen = () => {
   const dispatch = useAppDispatch();
@@ -43,16 +44,18 @@ const LoginScreen = () => {
     if (email && password) {
       auth()
         .signInWithEmailAndPassword(email, password)
-        .then(e =>
-          dispatch(
-            userActions.login({
-              userId: e.user.uid,
-              avatar: e.user.photoURL,
-              email: e.user.email,
-              userName: e.user.displayName,
-            }),
-          ),
-        )
+        .then(e => {
+          getUserData(e.user.uid).then(res => {
+            dispatch(
+              userActions.login({
+                userId: res.id,
+                avatar: res.avatar,
+                email: res.email,
+                userName: res.email,
+              }),
+            );
+          });
+        })
         .catch(e => {
           if (e) {
             handleError(e.toString());
@@ -82,6 +85,7 @@ const LoginScreen = () => {
         />
         <StyledTextInput
           value={password}
+          secureTextEntry={true}
           onChangeText={handlePassword}
           placeholder="Password"
         />

@@ -7,6 +7,11 @@ export const SearchWrapper = styled.Pressable`
   background-color: #eaeaea;
   border-radius: 12px;
   height: 40px;
-  padding: 0px 10px;
+
+  margin: 10px 0px;
   width: 90%;
+`;
+
+export const StyledTextInput = styled.TextInput`
+  padding: 0px 10px;
 `;

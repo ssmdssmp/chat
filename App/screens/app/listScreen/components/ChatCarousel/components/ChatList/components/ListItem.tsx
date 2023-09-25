@@ -43,7 +43,7 @@ const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
     setUnreadMessages(
       chatObj.chat.messages
         .filter(el => el.sender !== userId)
-        .filter(el => el.status === 'sent').length,
+        .filter(el => el.messageStatus === 'sent').length,
     );
   }, [chat.messages, chatsStateRef.length]);
 
