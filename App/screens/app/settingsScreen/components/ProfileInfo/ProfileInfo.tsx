@@ -1,7 +1,5 @@
 import React from 'react';
-import {cameraIcon, mokAvatar} from '@/assets';
 import {Avatar, UserName, Wrapper, UserInfo} from './styled';
-import {ActionButton} from '@/components';
 import {getUserSelector, useAppSelector} from '@/store';
 
 const ProfileInfo = () => {
