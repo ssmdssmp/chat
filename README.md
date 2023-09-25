@@ -15,7 +15,7 @@
 - `npm install`
 - `cd ios && pod install `
 - `../ && npx react-native start`
-- Choose your option
+  
 ## Prerequisites!
 
 - [Node.js > 12](https://nodejs.org) and npm (Recommended: Use [nvm](https://github.com/nvm-sh/nvm))
