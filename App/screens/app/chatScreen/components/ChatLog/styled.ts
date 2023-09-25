@@ -20,7 +20,15 @@ export const Message = styled.View<TStyledMessage>`
   padding: 8px;
   align-self: ${({message, userId}) =>
     message.sender === userId ? 'flex-end' : 'flex-start'};
-  padding-right: ${({message}) => (message.text.length < 20 ? 50 : 8)}px;
+
+  padding-right: ${({message, userId}) =>
+    message.sender === userId
+      ? message.text.length < 20
+        ? 65
+        : 8
+      : message.text.length < 20
+      ? 50
+      : 8}px;
   padding-bottom: ${({message}) => (message.text.length < 20 ? 8 : 28)}px;
   background-color: ${({message, userId}) =>
     message.sender === userId ? '#007BFF' : '#333333'};
@@ -30,17 +38,16 @@ export const Message = styled.View<TStyledMessage>`
   border-radius: 12px;
   max-width: 90%;
   height: auto;
-
   margin-top: 2px;
   margin-bottom: 2px;
 `;
 
-export const TimeStamp = styled.Text`
+export const TimeStamp = styled.Text<TStyledMessage>`
   position: absolute;
   font-size: 12px;
   bottom: 8px;
   color: white;
-  right: 8px;
+  right: ${({message, userId}) => (message.sender === userId ? 23 : 10)}px;
 `;
 
 export const MessageText = styled.Text`

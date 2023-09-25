@@ -10,10 +10,15 @@ import {TMessage} from '@/types';
 import moment from 'moment';
 import {getUserSelector, useAppSelector} from '@/store';
 import {ListRenderItem} from 'react-native';
+import {View} from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import {SvgXml} from 'react-native-svg';
+import {readIcon, sendingIcon, sentIcon} from '@/assets';
 
 const ChatLog = ({messages}: {messages: TMessage[]}) => {
   const {userId} = useAppSelector(getUserSelector);
   const [isFlatListReady, SetIsFlatListReady] = useState(0);
+  const route = useRoute();
   const flatListRef = useRef(null);
   const handleFlatListReady = () => {
     if (isFlatListReady === 0) {
@@ -32,7 +37,24 @@ const ChatLog = ({messages}: {messages: TMessage[]}) => {
     return (
       <Message key={item.id} message={item} userId={userId}>
         <MessageText>{item.text}</MessageText>
-        <TimeStamp>{moment(item.timestamp).format('HH:mm')}</TimeStamp>
+        <TimeStamp message={item} userId={userId}>
+          {moment(item.timestamp).format('HH:mm')}
+        </TimeStamp>
+        {item.sender === userId ? (
+          <View style={{position: 'absolute', bottom: 5, right: 5}}>
+            <SvgXml
+              width={15}
+              height={15}
+              xml={
+                item.status === 'received'
+                  ? readIcon
+                  : item.status === 'sent'
+                  ? sentIcon
+                  : sendingIcon
+              }
+            />
+          </View>
+        ) : null}
       </Message>
     );
   };

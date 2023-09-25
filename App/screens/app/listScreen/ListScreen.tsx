@@ -7,7 +7,7 @@ import {chatActions, getUserSelector, useAppSelector} from '@/store';
 import {useAppDispatch} from '@/store';
 import {getChatSelector} from '@/store/modules/chat/selector';
 import {RTDatabase} from '@/services';
-import {TChat, TChatWithReceiverData, TMessage} from '@/types';
+import {TChatWithReceiverData} from '@/types';
 
 const ListScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -50,7 +50,7 @@ const ListScreen = () => {
               newMessage.key
             ) {
               dispatch(
-                chatActions.updateChat({
+                chatActions.addMessage({
                   id: item.chat.id,
                   message: {...newMessage.val(), id: newMessage.key},
                 }),
@@ -77,6 +77,7 @@ const ListScreen = () => {
       ) {
         if (chatsStateRef.current.length === 0) {
           dispatch(chatActions.setChats([newChatWithReceiverData]));
+          console.log(chatsStateRef.current[0].chat.messages);
         } else {
           dispatch(chatActions.addChat(newChatWithReceiverData));
         }
@@ -88,7 +89,7 @@ const ListScreen = () => {
             newMessage.key
           ) {
             dispatch(
-              chatActions.updateChat({
+              chatActions.addMessage({
                 id: newChatWithReceiverData.chat.id,
                 message: {...newMessage.val(), id: newMessage.key},
               }),
@@ -97,7 +98,6 @@ const ListScreen = () => {
           }
         });
       }
-      dispatch(chatActions.sortChats());
     });
 
     socket.on('deleted', data => {

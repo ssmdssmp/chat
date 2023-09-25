@@ -36,9 +36,26 @@ export const LastMessage = styled.Text`
 export const BorderMask = styled.View`
   position: absolute;
   bottom: -10px;
-
   left: 0;
   height: 5px;
   background: #fff;
   width: 65px;
+`;
+
+export const UnreadMessages = styled.View`
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  right: 20px;
+  top: 35px;
+  background-color: skyblue;
+  height: 24px;
+  width: 24px;
+  border-radius: 40px;
+`;
+
+export const UnreadMessagesText = styled.Text`
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
 `;

@@ -10,41 +10,42 @@ import {
   LastMessage,
   StatusTextWrapper,
   BorderMask,
+  UnreadMessages,
+  UnreadMessagesText,
 } from './styled';
 import {AppNavigationProp} from '@/navigation';
 import {TChatWithReceiverData} from '@/types/chat';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import useFormattedDate from '@/hooks/useFormattedDate';
-import {useAppSelector} from '@/store';
+import {getUserSelector, useAppSelector} from '@/store';
 import {getChatSelector} from '@/store/modules/chat/selector';
 
 const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
   const navigation = useNavigation<AppNavigationProp>();
   const {chats} = useAppSelector(getChatSelector);
+  const {userId} = useAppSelector(getUserSelector);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const chatsStateRef = useRef(null);
-  chatsStateRef.current = chats;
-
   const [lastMessage, setLastMessage] = useState({
     id: '',
     timestamp: new Date(),
     text: '',
     sender: '',
   });
-
+  chatsStateRef.current = chats;
   if (!chatObj) {
-    // Handle the case when chatObj is undefined
-    return (
-      <PressableChatItem
-        onPress={() => {
-          /* Handle the press event for undefined chatObj */
-        }}></PressableChatItem>
-    );
+    return;
   }
+
   const {receiver, chat} = chatObj;
   useEffect(() => {
     setLastMessage(chat.messages.at(-1));
-    console.log(lastMessage);
-  }, [chat.messages.length, chatsStateRef.length]);
+    setUnreadMessages(
+      chatObj.chat.messages
+        .filter(el => el.sender !== userId)
+        .filter(el => el.status === 'sent').length,
+    );
+  }, [chat.messages, chatsStateRef.length]);
 
   const handleItemPress = () => {
     navigation.navigate('Chat', {
@@ -78,6 +79,11 @@ const ListItem = ({chatObj}: {chatObj: TChatWithReceiverData}) => {
         </StatusTextWrapper>
         <BorderMask />
       </FlexWrapper>
+      {unreadMessages !== 0 ? (
+        <UnreadMessages>
+          <UnreadMessagesText>{unreadMessages}</UnreadMessagesText>
+        </UnreadMessages>
+      ) : null}
     </PressableChatItem>
   );
 };

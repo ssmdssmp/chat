@@ -9,7 +9,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@/store';
-import {createNewChat, sendMessage} from '@/services';
+import {createNewChat, RTDatabase, sendMessage} from '@/services';
 import {TMessage} from '@/types';
 import {getChatSelector} from '@/store/modules/chat/selector';
 const ChatInput = () => {
@@ -25,22 +25,67 @@ const ChatInput = () => {
         text: messageText,
         timestamp: new Date().toString(),
         sender: userId ? userId : '',
+        status: 'sent',
       };
 
       if (route.params.id) {
+        const newMessageKey = RTDatabase.ref('chats').push().key;
         try {
-          await sendMessage(route.params.id, newMessage, userId);
+          dispatch(
+            chatActions.addMessage({
+              id: route.params.id,
+              message: {
+                ...newMessage,
+                status: 'sending',
+                id: newMessageKey as string,
+              },
+            }),
+          );
+          await sendMessage(
+            newMessageKey as string,
+            route.params.id,
+            newMessage,
+            userId,
+          ).then(() => {
+            setTimeout(() => {
+              dispatch(
+                chatActions.changeMessageStatus({
+                  chatId: route.params.id,
+                  messageId: newMessageKey,
+                  newStatus: 'sent',
+                }),
+              );
+            }, 100);
+          });
         } catch (error) {
           console.error('Error sending message:', error);
+          dispatch(
+            chatActions.changeMessageStatus({
+              chatId: route.params.id,
+              messageId: newMessageKey,
+              newStatus: 'error',
+            }),
+          );
         }
       } else {
         try {
-          const {newChat, newChatId} = await createNewChat(
+          const {newChat, newChatId, newMessageKey} = await createNewChat(
             userId as string,
             route.params.receiver.id,
             messageText,
           );
           dispatch(chatActions.setChats([...chats, newChat]));
+
+          setTimeout(() => {
+            dispatch(
+              chatActions.changeMessageStatus({
+                chatId: newChatId,
+                messageId: newMessageKey,
+                newStatus: 'sent',
+              }),
+            );
+          }, 100);
+
           navigation.setParams({id: newChatId as string});
         } catch (error) {
           console.error('Error creating chat:', error);

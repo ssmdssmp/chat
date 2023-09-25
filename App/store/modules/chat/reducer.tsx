@@ -13,26 +13,34 @@ export const chatReducer = createSlice({
       state.chats = payload;
     },
     addChat: (state, {payload}) => {
-      if (state.chats.length >= 2) {
-        state.chats = [payload, ...state.chats].sort((a, b) => {
-          const dateA = new Date(a.chat.messages.at(-1).timestamp);
-          const dateB = new Date(b.chat.messages.at(-1).timestamp);
-          return dateA - dateB;
-        });
-      }
       if (state.chats.length === 0) {
         state.chats = payload;
       } else {
-        state.chats = [payload, ...state.chats];
+        state.chats = [...state.chats, payload].sort((a, b) => {
+          const dateA = new Date(a.chat.messages.at(-1).timestamp);
+          const dateB = new Date(b.chat.messages.at(-1).timestamp);
+          return dateB - dateA;
+        });
       }
     },
-    updateChat: (
+    addMessage: (
       state,
       {payload}: {payload: {id: string; message: TMessage}},
     ) => {
       state.chats
         .filter(el => el.chat.id === payload.id)[0]
         .chat.messages.push(payload.message);
+    },
+    changeMessageStatus: (
+      state,
+      {
+        payload,
+      }: {payload: {chatId: string; messageId: string; newStatus: string}},
+    ) => {
+      state.chats
+        .filter(el => el.chat.id === payload.chatId)[0]
+        .chat.messages.find(el => el.id === payload.messageId).status =
+        payload.newStatus;
     },
     sortChats: state => {
       if (state.chats.length >= 2) {
@@ -46,6 +54,7 @@ export const chatReducer = createSlice({
     deleteChat: (state, {payload}) => {
       state.chats = state.chats.filter(el => el.chat.id !== payload);
     },
+
     resetChats: state => {
       state.chats = [];
     },

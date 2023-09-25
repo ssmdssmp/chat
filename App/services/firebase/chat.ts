@@ -16,14 +16,29 @@ export const getChatById = async (id: string) => {
   }
 };
 
+export const updateMessageStatus = async (
+  chatId: string,
+  messageId: string,
+  newStatus: string,
+) => {
+  try {
+    const messageRef = RTDatabase.ref(`chats/${chatId}/messages/${messageId}`);
+    await messageRef.update({status: newStatus});
+  } catch (error) {
+    console.error('Error getting chat:', error);
+    throw error;
+  }
+};
+
 export const sendMessage = async (
+  newMessageId: string,
   chatId: string,
   message: TMessage,
   userId: string | null,
 ) => {
   await getChatById(chatId).then(result => {
     if (userId && result.participants && result.participants[userId]) {
-      RTDatabase.ref(`chats/${chatId}/messages/`).push(message);
+      RTDatabase.ref(`chats/${chatId}/messages/${newMessageId}`).set(message);
     }
   });
 };
@@ -84,17 +99,15 @@ export const createNewChat = async (
   receiverId: string,
   firstMessage: string,
 ) => {
-  // Generate a unique key for the new chat entry
   const newChatKey = RTDatabase.ref('chats').push().key;
-
-  // Create the chat entry
+  const newMessageKey = RTDatabase.ref('chats').push().key;
   const chatEntry = {
     messages: {
-      [newChatKey]: {
+      [newMessageKey]: {
         sender: senderId,
         text: firstMessage,
-        timestamp: new Date().toString(),
         status: 'sent',
+        timestamp: new Date().toString(),
       },
     },
     participants: {
@@ -103,16 +116,12 @@ export const createNewChat = async (
     },
   };
 
-  // Set the chat entry in the Firebase Realtime Database
   await RTDatabase.ref(`chats/${newChatKey}`).set(chatEntry);
 
-  // Fetch the new chat
   const newChat = await getChatById(newChatKey);
 
-  // Fetch receiver data
   const receiver = await getUserData(receiverId);
 
-  // Transform messages into an array and sort them
   const messagesArray = Object.entries(newChat.messages).map(
     ([messageId, messageData]) => ({
       id: messageId,
@@ -122,12 +131,14 @@ export const createNewChat = async (
     }),
   );
 
-  // Create the newChatEntry object
   const newChatEntry = {
     chat: {...newChat, id: newChatKey, messages: messagesArray},
     receiver,
   };
 
-  // Return the newChatEntry and newChatId
-  return {newChat: newChatEntry, newChatId: newChatKey};
+  return {
+    newChat: newChatEntry,
+    newChatId: newChatKey,
+    newMessageKey: newMessageKey,
+  };
 };
