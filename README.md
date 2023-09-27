@@ -25,8 +25,11 @@
 - Typing status
 - Search by message or username at list screen
 - Code cleaning
+- Host backend
 
 ## Usage
+
+For now, backend is not hosted, so you need to run it on your localhost. Link for backend: https://github.com/ssmdssmp/chat-backend
 
 You can create new account or use existing accounts for testing:
 
