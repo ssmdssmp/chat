@@ -8,6 +8,23 @@
 
 **Description:** This is a real-time chat application with automatic message and chat updates.
 
+*Current features*:
+
+- Realtime updates for both single chat screen and list screen
+- Auth: sign in, sign up, logout
+- Message statuses: uploading, sent, received
+- User search and new chat creation
+
+*Upcoming features*:
+
+- Add photo or file to message
+- Change user info
+- Onboarding navigator
+- Online and last seen status for users
+- Chat folders
+- Typing status
+- Search by message or username at list screen
+
 
 ## Start the project
 
