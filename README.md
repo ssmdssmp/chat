@@ -24,6 +24,7 @@
 - Chat folders
 - Typing status
 - Search by message or username at list screen
+- Code cleaning
 
 
 ## Start the project
