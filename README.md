@@ -26,6 +26,24 @@
 - Search by message or username at list screen
 - Code cleaning
 
+## Usage
+
+You can create new account or use existing accounts for testing:
+
+Login: user.1@gmail.com
+Password: 123123123
+
+To test realtime updates you will need to run another simulator with another creditentials, create or use another test account:
+
+Login: user.2@gmail.com
+Password: 12312313
+
+You can use user search to find an account to start chat with. Searchable accounts:
+
+andrew.wiggins
+steph.curry
+draymond.green 
+
 
 ## Start the project
 
