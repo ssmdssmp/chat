@@ -42,7 +42,9 @@ You can use user search to find an account to start chat with. Searchable accoun
 
 andrew.wiggins
 steph.curry
-draymond.green 
+draymond.green
+user.1
+user.2
 
 
 ## Start the project
